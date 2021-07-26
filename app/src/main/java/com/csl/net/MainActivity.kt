@@ -32,7 +32,16 @@ class MainActivity : AppCompatActivity() {
         liveInfo.observe(this, Observer {
             LogUtils.d("retrofit liveRsp ${it.toString()}")
         })
-
+        //NBA请求相关
+        val retrofitCall1 = KtRetrofit.initConfig("http://apis.juhe.cn/")
+            .getService(CniaoService::class.java)
+            .NBAInfo()
+        //ktx的liveData
+        val liveInfo1 = retrofitCall1.toLiveData()
+        liveInfo1.observe(this, Observer {
+            LogUtils.d("NBA retrofit liveRsp ${it.toString()}")
+        })
+        //登录请求相关
         val loginCall = KtRetrofit.initConfig(netUrl, OkHttpApi.getInstance().getClient())
             .getService(CniaoService::class.java)
             .login(LoginReq())
@@ -74,6 +83,9 @@ interface CniaoService {
 
     @GET("member/userinfo")
     fun userInfo2(): LiveData<ApiResponse<NetResponse>>
+
+    @GET("fapig/nba/query?key=11cb27c5a93b1de47bc38050777af526")
+    fun NBAInfo(): Call<NBATestResponse>
 }
 
 
